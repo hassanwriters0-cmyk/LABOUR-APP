@@ -1,0 +1,323 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LABOUR APP - Skilled Worker & Client Platform (Pakistan)</title>
+  <meta name="description" content="Secure Pakistani mobile platform connecting verified Skilled Workers with Clients featuring SMS OTP, NADRA CNIC verification, and admin panel." />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col antialiased">
+
+  <!-- TOP BAR -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between gap-8 h-16">
+        <div class="flex items-center gap-3 shrink-0">
+          <button onclick="switchView('APP')" class="flex items-center gap-2.5 focus:outline-none text-left">
+            <div class="w-9 h-9 rounded-xl bg-emerald-800 text-white flex items-center justify-center font-bold text-lg shadow-sm">L</div>
+            <div>
+              <span class="text-lg font-bold tracking-tight text-slate-900 whitespace-nowrap">LABOUR APP</span>
+              <span class="hidden sm:inline text-xs text-slate-500 ml-2 font-medium">پاکستان</span>
+            </div>
+          </button>
+        </div>
+
+        <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+          <button onclick="switchView('APP')" class="hover:text-slate-900">Skilled Workers (ماہر کاریگر)</button>
+          <button onclick="switchView('APP')" class="hover:text-slate-900">NADRA CNIC Verification</button>
+          <button onclick="openSmsDrawer()" class="hover:text-emerald-800 flex items-center gap-1.5 text-emerald-800 font-medium">
+            <i data-lucide="smartphone" class="w-4 h-4"></i>
+            <span>Live SMS Handset Feed</span>
+          </button>
+          <button onclick="switchView('ADMIN')" class="hover:text-slate-900 flex items-center gap-1.5 text-slate-700">
+            <i data-lucide="shield" class="w-4 h-4 text-emerald-800"></i>
+            <span>Super Admin Panel</span>
+          </button>
+        </nav>
+
+        <div class="flex items-center gap-3 shrink-0">
+          <button onclick="downloadSelfHtml()" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Save HTML File</span>
+          </button>
+          <button onclick="openLoginModal()" class="px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-slate-100 rounded-lg">Sign In</button>
+          <button onclick="openRegisterModal()" class="px-4 py-2 text-xs font-semibold text-white bg-emerald-800 hover:bg-emerald-900 rounded-lg shadow-sm">Join / Register</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- VIEWPORT SELECTOR -->
+  <div class="bg-white border-b border-slate-200 py-1.5 px-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="font-semibold text-slate-700">LABOUR APP Mobile Platform</span>
+        <span>·</span>
+        <span class="text-emerald-800 font-medium">NADRA CNIC Identity Vault (Pakistan)</span>
+      </div>
+      <button id="toggleFrameBtn" onclick="toggleMobileFrame()" class="px-2.5 py-1 rounded-lg text-[11px] font-medium border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700">
+        📱 Switch to Mobile Phone Frame (390px)
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN APP WRAPPER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+    <div id="contentContainer" class="w-full">
+
+      <!-- PUBLIC DISCOVERY VIEW -->
+      <div id="appView" class="space-y-12">
+        <section class="bg-slate-900 text-white rounded-3xl overflow-hidden border border-slate-800 shadow-md">
+          <div class="grid grid-cols-1 lg:grid-cols-2 items-stretch p-8 sm:p-12">
+            <div>
+              <span class="px-2.5 py-1 bg-emerald-950 text-emerald-400 border border-emerald-800 rounded-lg text-xs font-semibold">Verified Tradespeople · پاکستان</span>
+              <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-white mt-3">Connect with Verified Skilled Workers in Pakistan</h1>
+              <p class="text-sm text-slate-300 mt-3 leading-relaxed">
+                LABOUR APP provides secure mobile registration, 6-digit SMS OTP verification, and NADRA CNIC document inspection to protect both clients and tradespeople.
+              </p>
+              <div class="pt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <button onclick="startRegistration('WORKER')" class="p-4 bg-emerald-800 hover:bg-emerald-900 text-white rounded-2xl text-left">
+                  <span class="text-xs text-emerald-200 block">I am a Craftsman</span>
+                  <strong class="text-sm font-bold block">Register as Skilled Worker</strong>
+                  <span class="text-[11px] text-emerald-100">ماہر کاریگر رجسٹریشن</span>
+                </button>
+                <button onclick="startRegistration('CLIENT')" class="p-4 bg-white/10 hover:bg-white/15 text-white rounded-2xl text-left border border-white/10">
+                  <span class="text-xs text-slate-300 block">I need Services</span>
+                  <strong class="text-sm font-bold block">Register as Client</strong>
+                  <span class="text-[11px] text-slate-400">کسٹمر اکاؤنٹ بنائیں</span>
+                </button>
+              </div>
+            </div>
+            <div class="hidden lg:flex flex-col justify-center items-center text-center p-8 bg-slate-950/50 rounded-2xl border border-slate-800 ml-8">
+              <i data-lucide="shield-check" class="w-16 h-16 text-emerald-400 mb-3"></i>
+              <h3 class="text-lg font-bold text-white">NADRA Biometric Compliance</h3>
+              <p class="text-xs text-slate-400 max-w-xs mt-1">Worker CNIC number and selfie are verified by administrators before public listing.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- WORKER CARDS -->
+        <section class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-bold text-slate-900">Approved Skilled Workers (ماہر کاریگر)</h2>
+            <div class="flex gap-1.5 text-xs">
+              <button onclick="filterPublicWorkers('ALL')" class="filter-btn px-3 py-1.5 rounded-lg bg-slate-900 text-white font-medium" data-filter="ALL">All</button>
+              <button onclick="filterPublicWorkers('Electrician')" class="filter-btn px-3 py-1.5 rounded-lg bg-white border text-slate-600 font-medium" data-filter="Electrician">Electrician</button>
+              <button onclick="filterPublicWorkers('Carpenter')" class="filter-btn px-3 py-1.5 rounded-lg bg-white border text-slate-600 font-medium" data-filter="Carpenter">Carpenter</button>
+              <button onclick="filterPublicWorkers('AC Technician')" class="filter-btn px-3 py-1.5 rounded-lg bg-white border text-slate-600 font-medium" data-filter="AC Technician">AC Tech</button>
+            </div>
+          </div>
+          <div id="workersGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        </section>
+      </div>
+
+      <!-- SUPER ADMIN VIEW -->
+      <div id="adminView" class="hidden space-y-6">
+        <div class="bg-slate-900 text-white rounded-2xl p-6 border border-slate-800 flex justify-between items-center">
+          <div>
+            <span class="text-xs font-mono text-emerald-400 uppercase font-semibold">SUPER ADMINISTRATOR DESK · masoomtanhaai@gmail.com</span>
+            <h2 class="text-2xl font-bold text-white mt-1">Verification Desk & Platform Audit</h2>
+          </div>
+          <button onclick="switchView('APP')" class="px-4 py-2 bg-emerald-800 text-white text-xs font-semibold rounded-xl">‹ Back to App</button>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
+          <div class="p-4 border-b font-bold text-sm text-slate-900">Pending CNIC Identity Review Queue</div>
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-50 border-b text-slate-500 uppercase text-[10px]">
+              <tr>
+                <th class="py-3 px-4">Applicant</th>
+                <th class="py-3 px-4">Profession</th>
+                <th class="py-3 px-4">City</th>
+                <th class="py-3 px-4">Daily Wage</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="adminWorkersTable" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODALS (REGISTRATION, SMS FEED, CNIC INSPECTION) -->
+  <div id="registerModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 space-y-4">
+      <div class="flex justify-between items-center border-b pb-3">
+        <h3 class="font-bold text-slate-900">Registration Step: Mobile & OTP</h3>
+        <button onclick="closeRegisterModal()">✕</button>
+      </div>
+      <div id="regStep2">
+        <label class="block text-xs font-semibold text-slate-700 mb-1">Pakistani Mobile (03XXXXXXXXX)</label>
+        <input type="tel" id="regMobileInput" value="03019876543" class="w-full px-3 py-2 border rounded-xl text-xs font-mono" />
+        <button onclick="requestRegOtp()" class="w-full mt-3 py-2 bg-emerald-800 text-white rounded-xl text-xs font-semibold">Send 6-Digit SMS OTP</button>
+      </div>
+      <div id="regStep3" class="hidden space-y-3">
+        <p class="text-xs text-slate-600">Simulated Code: <strong id="regSimulatedOtpCode" class="text-emerald-800 font-mono text-sm">482910</strong></p>
+        <input type="text" id="regOtpInput" maxlength="6" placeholder="Enter 6-digit OTP" class="w-full text-center text-lg font-mono py-2 border rounded-xl" />
+        <button onclick="verifyRegOtp()" class="w-full py-2 bg-emerald-800 text-white rounded-xl text-xs font-semibold">Verify OTP & Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="smsModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-5 space-y-3">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-sm text-slate-900">Live SMS Handset Feed</h3>
+        <button onclick="closeSmsDrawer()">✕</button>
+      </div>
+      <div id="smsFeedList" class="space-y-2 text-xs"></div>
+    </div>
+  </div>
+
+  <div id="inspectModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg p-6 space-y-4">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-slate-900">Privileged Document Review</h3>
+        <button onclick="closeInspectModal()">✕</button>
+      </div>
+      <div class="text-xs space-y-2">
+        <p>Applicant: <strong id="inspectWorkerName">Zeeshan Ali</strong></p>
+        <p>CNIC Number: <strong id="inspectCnic" class="font-mono text-emerald-800">61101-8392019-5</strong></p>
+        <div class="grid grid-cols-3 gap-2 py-2 text-center text-[11px]">
+          <div class="p-2 border rounded-lg bg-slate-50">[CNIC Front]</div>
+          <div class="p-2 border rounded-lg bg-slate-50">[CNIC Back]</div>
+          <div class="p-2 border rounded-lg bg-slate-50">[Live Selfie]</div>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2 border-t">
+        <button onclick="adminDecision('REJECTED')" class="px-3 py-1.5 text-xs text-rose-700 bg-rose-50 rounded-lg">Reject</button>
+        <button onclick="adminDecision('APPROVED')" class="px-4 py-1.5 text-xs text-white bg-emerald-800 rounded-lg">Approve & Verify</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const state = {
+      workers: [
+        { id: 'wkr_01', fullName: 'Muhammad Raheel Akhtar', profession: 'Electrician', city: 'Karachi', wage: 2500, exp: 8, status: 'APPROVED', cnic: '42101-5829143-3', bio: 'Certified master electrician with 8+ years hands-on experience in residential wiring and DB switchboards.' },
+        { id: 'wkr_02', fullName: 'Tariq Mehmood Chishti', profession: 'Carpenter', city: 'Lahore', wage: 3000, exp: 12, status: 'APPROVED', cnic: '35202-3948271-7', bio: 'Master carpenter specializing in solid wood framing, modular kitchen cabinetry, and antique furniture restoration.' },
+        { id: 'wkr_03', fullName: 'Zeeshan Ali Babar', profession: 'AC Technician', city: 'Islamabad', wage: 2200, exp: 5, status: 'PENDING_VERIFICATION', cnic: '61101-8392019-5', bio: 'Expert AC Technician for all DC Inverter models.' }
+      ],
+      sms: [{ phone: '+923019876543', code: '482910', msg: 'Your LABOUR APP verification code is 482910.' }],
+      filter: 'ALL',
+      selectedWorkerId: null
+    };
+
+    function renderWorkers() {
+      const el = document.getElementById('workersGrid');
+      const list = state.workers.filter(w => w.status === 'APPROVED' && (state.filter === 'ALL' || w.profession === state.filter));
+      el.innerHTML = list.map(w => `
+        <div class="bg-white rounded-2xl border p-5 shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-3 mb-2">
+              <div class="w-10 h-10 rounded-xl bg-emerald-800 text-white font-bold flex items-center justify-center">${w.fullName[0]}</div>
+              <div>
+                <h4 class="font-bold text-sm text-slate-900">${w.fullName}</h4>
+                <p class="text-xs text-emerald-800 font-semibold">${w.profession} · ${w.city}</p>
+              </div>
+            </div>
+            <p class="text-xs text-slate-600 line-clamp-2 my-2">${w.bio}</p>
+          </div>
+          <div class="pt-3 border-t flex justify-between items-center text-xs">
+            <div><span class="text-slate-400 block text-[10px]">Daily Wage</span><strong>PKR ${w.wage}</strong></div>
+            <button onclick="alert('Proposal sent to ${w.fullName}!')" class="px-3 py-1.5 bg-emerald-800 text-white rounded-lg font-semibold">Hire</button>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderAdmin() {
+      const tbody = document.getElementById('adminWorkersTable');
+      tbody.innerHTML = state.workers.map(w => `
+        <tr class="border-b hover:bg-slate-50">
+          <td class="py-3 px-4 font-semibold">${w.fullName}<span class="block text-[10px] text-slate-400 font-mono">${w.cnic}</span></td>
+          <td class="py-3 px-4 text-emerald-800">${w.profession}</td>
+          <td class="py-3 px-4">${w.city}</td>
+          <td class="py-3 px-4 font-mono">PKR ${w.wage}</td>
+          <td class="py-3 px-4"><span class="px-2 py-0.5 rounded text-[10px] font-bold ${w.status === 'APPROVED' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">${w.status}</span></td>
+          <td class="py-3 px-4 text-right"><button onclick="openInspect('${w.id}')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded font-semibold">Inspect</button></td>
+        </tr>
+      `).join('');
+    }
+
+    function filterPublicWorkers(cat) {
+      state.filter = cat;
+      document.querySelectorAll('.filter-btn').forEach(b => b.className = b.dataset.filter === cat ? 'filter-btn px-3 py-1.5 rounded-lg bg-slate-900 text-white font-medium' : 'filter-btn px-3 py-1.5 rounded-lg bg-white border text-slate-600 font-medium');
+      renderWorkers();
+    }
+
+    function switchView(view) {
+      document.getElementById('appView').classList.toggle('hidden', view === 'ADMIN');
+      document.getElementById('adminView').classList.toggle('hidden', view !== 'ADMIN');
+      if (view === 'ADMIN') renderAdmin();
+      else renderWorkers();
+    }
+
+    function toggleMobileFrame() {
+      const c = document.getElementById('contentContainer');
+      const b = document.getElementById('toggleFrameBtn');
+      const isMobile = c.classList.toggle('max-w-md');
+      c.classList.toggle('mx-auto', isMobile);
+      c.classList.toggle('shadow-2xl', isMobile);
+      c.classList.toggle('border-4', isMobile);
+      b.textContent = isMobile ? '🖥️ Switch to Wide Responsive View' : '📱 Switch to Mobile Phone Frame (390px)';
+    }
+
+    function openRegisterModal() { document.getElementById('registerModal').classList.remove('hidden'); }
+    function closeRegisterModal() { document.getElementById('registerModal').classList.add('hidden'); }
+    function requestRegOtp() {
+      const code = Math.floor(100000 + Math.random() * 900000).toString();
+      document.getElementById('regSimulatedOtpCode').textContent = code;
+      state.sms.unshift({ phone: document.getElementById('regMobileInput').value, code: code, msg: 'Your verification OTP is ' + code });
+      document.getElementById('regStep2').classList.add('hidden');
+      document.getElementById('regStep3').classList.remove('hidden');
+    }
+    function verifyRegOtp() {
+      alert('Mobile verified successfully! Your application is in pending verification.');
+      closeRegisterModal();
+    }
+    function openSmsDrawer() {
+      document.getElementById('smsFeedList').innerHTML = state.sms.map(s => `<div class="p-2.5 bg-slate-50 border rounded-xl"><strong>${s.phone}</strong><p class="text-slate-700">${s.msg}</p><strong class="text-emerald-800">OTP: ${s.code}</strong></div>`).join('');
+      document.getElementById('smsModal').classList.remove('hidden');
+    }
+    function closeSmsDrawer() { document.getElementById('smsModal').classList.add('hidden'); }
+    function openInspect(id) {
+      state.selectedWorkerId = id;
+      const w = state.workers.find(i => i.id === id);
+      document.getElementById('inspectWorkerName').textContent = w.fullName;
+      document.getElementById('inspectCnic').textContent = w.cnic;
+      document.getElementById('inspectModal').classList.remove('hidden');
+    }
+    function closeInspectModal() { document.getElementById('inspectModal').classList.add('hidden'); }
+    function adminDecision(status) {
+      const w = state.workers.find(i => i.id === state.selectedWorkerId);
+      if (w) w.status = status;
+      closeInspectModal();
+      renderAdmin();
+      renderWorkers();
+    }
+    function downloadSelfHtml() {
+      const blob = new Blob([document.documentElement.outerHTML], { type: 'text/html' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'labour_app_pakistan.html';
+      a.click();
+    }
+    window.addEventListener('DOMContentLoaded', () => { renderWorkers(); lucide.createIcons(); });
+  </script>
+</body>
+</html>
